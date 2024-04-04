@@ -1,6 +1,7 @@
 10 print "{clear}basictet"
 15 gosub 400: rem dim variables
 20 gosub 100: rem read tetronimos
+25 gosub 800: rem render playing field
 30 gosub 300: rem game loop
 40 end
 
@@ -65,6 +66,16 @@
 730 y = y2: x = x2: o = o2
 740 gosub 200
 750 return
+
+800 rem **** render playing fiel ****
+810 for y = 5 to 20
+820 : poke 1024 + y*40 + 14, 160
+830 : poke 1024 + y*40 + 25, 160
+840 next y
+850 for x = 14 to 25
+860 : poke 1024 + y*40 + x, 160
+870 next x
+880 return
 
 1000 rem **** data ****
 
