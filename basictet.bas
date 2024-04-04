@@ -15,12 +15,10 @@
 199 return
 
 200 rem **** render tetronimo ****
-202 t1 = 1024+x
 205 for l = 0 to 3
-208 : t2 = t1 + (y+l)*40
+208 : tmp = 1024 + x + (y+l)*40
 210 : for s = 0 to 3
-215 :   t3 = t2 + s
-220 :   if (sq(t, r, l) and 2^s) > 0 then poke t2+s, 209
+220 :   if (sq(t, r, l) and 2^s) > 0 then poke tmp + s, 209
 230 : next s
 240 next l
 299 return
