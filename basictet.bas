@@ -1,5 +1,4 @@
-10 print "basictet"
-15 print "{clear}"
+10 print "{clear}basictet"
 20 gosub 100: rem read tetronimos
 30 gosub 300: rem render tetronimos
 40 end
