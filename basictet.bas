@@ -1,16 +1,16 @@
 10 print "{clear}basictet"
+15 gosub 400: rem dim variables
 20 gosub 100: rem read tetronimos
 30 gosub 300: rem render tetronimos
 40 end
 
-
 100 rem **** read tetronimos ****
 120 for t = 0 to 6
-130 : for r = 0 to 3
+130 : for o = 0 to 3
 135 :   for l = 0 to 3
-140 :     read sq(t, r, l): rem square
+140 :     read sq(t, o, l): rem square
 145 :   next l
-150 : next r
+150 : next o
 160 next t
 199 return
 
@@ -18,7 +18,7 @@
 205 for l = 0 to 3
 208 : tmp = 1024 + x + (y+l)*40
 210 : for s = 0 to 3
-220 :   if (sq(t, r, l) and 2^s) > 0 then poke tmp + s, 209
+220 :   if (sq(t, o, l) and 2^s) > 0 then poke tmp + s, 209
 230 : next s
 240 next l
 299 return
@@ -26,14 +26,23 @@
 300 rem **** render tetronimos ****
 310 x = 0
 320 for t = 0 to 6
-325 : r = 0
+325 : o = 0
 330 : x = x + 5
 340 : for y = 5 to 20 step 5
 350 :   gosub 200: rem render tetronimo
-360 :   r = r + 1
+360 :   o = o + 1
 370 : next y
 380 next t
 390 return
+
+400 rem **** dim variables ****
+405 let t = 6: rem there's 7 tetronimos
+408 let o = 3: rem each tetronimo has 4 orientations
+409 let l = 3: rem every orientation has 4 lines
+410 dim sq(6, 3, 3): rem every line and orientation for every tetronimo
+415 let x = 0: rem the horizontal position of the tetronimo
+418 let y = 0: rem the vertical position of the tetronimo
+420 return
 
 
 1000 rem **** data ****
