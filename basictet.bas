@@ -1,7 +1,7 @@
 10 print "{clear}basictet"
 15 gosub 400: rem dim variables
 20 gosub 100: rem read tetronimos
-30 gosub 300: rem render tetronimos
+30 gosub 300: rem game loop
 40 end
 
 100 rem **** read tetronimos ****
@@ -14,25 +14,24 @@
 160 next t
 199 return
 
-200 rem **** render tetronimo ****
-205 for l = 0 to 3
-208 : tmp = 1024 + x + (y+l)*40
-210 : for s = 0 to 3
-220 :   if (sq(t, o, l) and 2^s) > 0 then poke tmp + s, 209
-230 : next s
-240 next l
-299 return
+200 rem **** clear tetronimo ****
+210 c = 209
+220 gosub 600
+230 return
 
-300 rem **** render tetronimos ****
-310 x = 0
-320 for t = 0 to 6
-325 : o = 0
-330 : x = x + 5
-340 : for y = 5 to 20 step 5
-350 :   gosub 200: rem render tetronimo
-360 :   o = o + 1
-370 : next y
-380 next t
+
+300 rem **** game loop ****
+310 x = 40 / 2 - 2
+320 y = 5
+325 t = 0
+330 o = 0
+335 gosub 200
+340 get k$
+342 if k$ = "w" then gosub 500: o = o + 1: gosub 200
+344 if k$ = "a" then gosub 500: x = x - 1: gosub 200
+350 if k$ = "s" then gosub 500: y = y + 1: gosub 200
+352 if k$ = "d" then gosub 500: x = x + 1: gosub 200
+380 goto 340
 390 return
 
 400 rem **** dim variables ****
@@ -44,6 +43,19 @@
 418 let y = 0: rem the vertical position of the tetronimo
 420 return
 
+500 rem **** clear tetronimo ****
+510 c = 32
+520 gosub 600
+530 return
+
+600 rem **** render or clear tetronimo ****
+605 for l = 0 to 3
+608 : tmp = 1024 + x + (y+l)*40
+610 : for s = 0 to 3
+620 :   if (sq(t, o, l) and 2^s) > 0 then poke tmp + s, c
+630 : next s
+640 next l
+699 return
 
 1000 rem **** data ****
 
