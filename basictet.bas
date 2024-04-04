@@ -30,11 +30,14 @@
 340 y2 = y: x2 = x: o2 = o
 341 d = d + 1: if d = 10 then d = 0: y2 = y2 + 1: goto 362
 342 get k$
-343 if k$ = "w" then o2 = (o2 + 1) and 3
-344 if k$ = "a" then x2 = x2 - 1
-350 if k$ = "s" then y2 = y2 + 1
-352 if k$ = "d" then x2 = x2 + 1
-362 gosub 700: rem maybe transform tetronimo
+343 if k$ = "w" then o2 = (o2 + 1) and 3: goto 362
+344 if k$ = "a" then x2 = x2 - 1: goto 362
+350 if k$ = "s" then y2 = y2 + 1: goto 362
+352 if k$ = "d" then x2 = x2 + 1: goto 362
+357 goto 340
+362 gosub 900: rem collision detection
+366 if peek(1064) = 42 then goto 340
+370 gosub 700: rem maybe transform tetronimo
 380 goto 340
 390 return
 
@@ -77,6 +80,18 @@
 860 : poke 1024 + y*40 + x, 160
 870 next x
 880 return
+
+900 rem **** detect colision ****
+905 for l = 0 to 3
+908 : tmp = 1024 + x2 + (y2+l)*40
+910 : for s = 0 to 3
+915 :   sc = peek(tmp + s)
+918 :   m = (sq(t, o2, l) and 2^s) > 0
+920 :   if m and sc <> 32 and sc <> 209 then poke 1064, 42: return
+930 : next s
+940 next l
+950 poke 1064, 32
+999 return
 
 1000 rem **** data ****
 
