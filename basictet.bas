@@ -14,7 +14,7 @@
 160 next t
 199 return
 
-200 rem **** clear tetronimo ****
+200 rem **** render tetronimo ****
 210 c = 209
 220 gosub 600
 230 return
@@ -26,11 +26,13 @@
 325 t = 6
 330 o = 0
 335 gosub 200
-340 get k$
-342 if k$ = "w" then gosub 500: o = (o + 1) and 3: gosub 200
-344 if k$ = "a" then gosub 500: x = x - 1: gosub 200
-350 if k$ = "s" then gosub 500: y = y + 1: gosub 200
-352 if k$ = "d" then gosub 500: x = x + 1: gosub 200
+340 y2 = y: x2 = x: o2 = o
+341 get k$
+342 if k$ = "w" then o2 = (o2 + 1) and 3
+344 if k$ = "a" then x2 = x2 - 1
+350 if k$ = "s" then y2 = y2 + 1
+352 if k$ = "d" then x2 = x2 + 1
+362 gosub 700: rem maybe transform tetronimo
 380 goto 340
 390 return
 
@@ -56,6 +58,13 @@
 630 : next s
 640 next l
 699 return
+
+700 rem **** maybe render tetronimo ****
+710 if y2 = y and x2 = x and o2 = o then return
+720 gosub 500
+730 y = y2: x = x2: o = o2
+740 gosub 200
+750 return
 
 1000 rem **** data ****
 
