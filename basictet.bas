@@ -37,7 +37,7 @@
 357 goto 340
 362 gosub 900: rem collision detection
 366 if peek(1064) = 42 then goto 340
-367 if peek(1064) = 218 then c = 215: gosub 600: goto 310
+367 if peek(1064) = 218 then gosub 1000: goto 310: rem land tetronimo
 370 gosub 700: rem maybe transform tetronimo
 380 goto 340
 390 return
@@ -97,46 +97,51 @@
 950 poke 1064, 32
 999 return
 
-1000 rem **** data ****
+1000 rem **** render landed tetronimo ****
+1010 c = 215
+1020 gosub 600
+1030 return
 
-1005 rem l
-1010 data 0,15,0,0: rem tetronimo 0, rotation 0, line 1-4
-1020 data 4,4,4,4: rem tetronimo 0, rotation 1, line 1-4
-1030 data 0,0,15,0: rem tetronimo 0, rotation 2, line 1-4
-1040 data 2,2,2,2: rem tetronimo 0, rotation 3, line 1-4
+2000 rem **** data ****
 
-1105 rem p
-1110 data 1, 7, 0, 0
-1120 data 6, 2, 2, 0
-1130 data 0, 7, 4, 0
-1140 data 2, 2, 3, 0
+2005 rem l
+2010 data 0,15,0,0: rem tetronimo 0, rotation 0, line 1-4
+2020 data 4,4,4,4: rem tetronimo 0, rotation 1, line 1-4
+2030 data 0,0,15,0: rem tetronimo 0, rotation 2, line 1-4
+2040 data 2,2,2,2: rem tetronimo 0, rotation 3, line 1-4
 
-1205 rem q
-1210 data 4, 7, 0, 0
-1220 data 2, 2, 6, 0
-1230 data 0, 7, 1, 0
-1240 data 3, 2, 2, 0
+2105 rem p
+2110 data 1, 7, 0, 0
+2120 data 6, 2, 2, 0
+2130 data 0, 7, 4, 0
+2140 data 2, 2, 3, 0
 
-1305 rem o
-1310 data 6, 6, 0, 0
-1320 data 6, 6, 0, 0
-1330 data 6, 6, 0, 0
-1340 data 6, 6, 0, 0
+2205 rem q
+2210 data 4, 7, 0, 0
+2220 data 2, 2, 6, 0
+2230 data 0, 7, 1, 0
+2240 data 3, 2, 2, 0
 
-1405 rem s
-1410 data 6, 3, 0, 0
-1420 data 2, 6, 4, 0
-1430 data 0, 6, 3, 0
-1440 data 1, 3, 2, 0
+2305 rem o
+2310 data 6, 6, 0, 0
+2320 data 6, 6, 0, 0
+2330 data 6, 6, 0, 0
+2340 data 6, 6, 0, 0
 
-1505 rem t
-1510 data 7,2,0,0
-1520 data 4,6,4,0
-1530 data 0,2,7,0
-1540 data 1,3,1,0
+2405 rem s
+2410 data 6, 3, 0, 0
+2420 data 2, 6, 4, 0
+2430 data 0, 6, 3, 0
+2440 data 1, 3, 2, 0
 
-1605 rem z
-1610 data 3, 6, 0, 0
-1620 data 4, 6, 2, 0
-1630 data 0, 3, 6, 0
-1640 data 2, 3, 1, 0
+2505 rem t
+2510 data 7,2,0,0
+2520 data 4,6,4,0
+2530 data 0,2,7,0
+2540 data 1,3,1,0
+
+2605 rem z
+2610 data 3, 6, 0, 0
+2620 data 4, 6, 2, 0
+2630 data 0, 3, 6, 0
+2640 data 2, 3, 1, 0
