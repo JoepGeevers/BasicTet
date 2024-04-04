@@ -23,11 +23,11 @@
 300 rem **** game loop ****
 310 x = 40 / 2 - 2
 320 y = 5
-325 t = 0
+325 t = 6
 330 o = 0
 335 gosub 200
 340 get k$
-342 if k$ = "w" then gosub 500: o = o + 1: gosub 200
+342 if k$ = "w" then gosub 500: o = (o + 1) and 3: gosub 200
 344 if k$ = "a" then gosub 500: x = x - 1: gosub 200
 350 if k$ = "s" then gosub 500: y = y + 1: gosub 200
 352 if k$ = "d" then gosub 500: x = x + 1: gosub 200
