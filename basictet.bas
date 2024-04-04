@@ -37,6 +37,7 @@
 357 goto 340
 362 gosub 900: rem collision detection
 366 if peek(1064) = 42 then goto 340
+367 if peek(1064) = 218 then c = 215: gosub 600: goto 310
 370 gosub 700: rem maybe transform tetronimo
 380 goto 340
 390 return
@@ -71,7 +72,7 @@
 740 gosub 200
 750 return
 
-800 rem **** render playing fiel ****
+800 rem **** render playing field ****
 810 for y = 5 to 20
 820 : poke 1024 + y*40 + 14, 160
 830 : poke 1024 + y*40 + 25, 160
@@ -85,9 +86,12 @@
 905 for l = 0 to 3
 908 : tmp = 1024 + x2 + (y2+l)*40
 910 : for s = 0 to 3
-915 :   sc = peek(tmp + s)
-918 :   m = (sq(t, o2, l) and 2^s) > 0
-920 :   if m and sc <> 32 and sc <> 209 then poke 1064, 42: return
+912 :   if (sq(t, o2, l) and 2^s) = 0 then goto 930
+914 :   sc = peek(tmp + s)
+915 :   if sc = 32 then goto 930
+918 :   if sc = 209 then goto 930
+920 :   if y2 = y then poke 1064, 42: return
+922 :   poke 1064, 218: return
 930 : next s
 940 next l
 950 poke 1064, 32
