@@ -28,8 +28,9 @@
 330 o = 0
 335 gosub 200
 340 y2 = y: x2 = x: o2 = o
-341 get k$
-342 if k$ = "w" then o2 = (o2 + 1) and 3
+341 d = d + 1: if d = 10 then d = 0: y2 = y2 + 1: goto 362
+342 get k$
+343 if k$ = "w" then o2 = (o2 + 1) and 3
 344 if k$ = "a" then x2 = x2 - 1
 350 if k$ = "s" then y2 = y2 + 1
 352 if k$ = "d" then x2 = x2 + 1
