@@ -6,13 +6,16 @@
 40 end
 
 100 rem **** read tetronimos ****
-120 for t = 0 to 6
-130 : for o = 0 to 3
-135 :   for l = 0 to 3
-140 :     read sq(t, o, l): rem square
-145 :   next l
-150 : next o
-160 next t
+170 for t = 0 to 6
+180 : for l = 0 to 3
+182 :   for r = 0 to 3
+186 :     read a$
+187 :     for b = 0 to 3
+192 :       if mid$(a$, b+1, 1) <> " " then sq(t, r, l) = sq(t, r, l) or 2^b
+194 :     next b
+196 :   next r
+197 : next l
+198 next t
 199 return
 
 200 rem **** render tetronimo ****
@@ -49,6 +52,7 @@
 408 let o = 3: rem each tetronimo has 4 orientations
 409 let l = 3: rem every orientation has 4 lines
 410 dim sq(6, 3, 3): rem every line and orientation for every tetronimo
+412 dim tt(7, 4, 4, 4)
 415 let x = 0: rem the horizontal position of the tetronimo
 418 let y = 0: rem the vertical position of the tetronimo
 420 return
@@ -131,44 +135,37 @@
 
 2000 rem **** data ****
 
-2005 rem l
-2010 data 0,15,0,0: rem tetronimo 0, rotation 0, line 1-4
-2020 data 4,4,4,4: rem tetronimo 0, rotation 1, line 1-4
-2030 data 0,0,15,0: rem tetronimo 0, rotation 2, line 1-4
-2040 data 2,2,2,2: rem tetronimo 0, rotation 3, line 1-4
+2700 data "    ","  X ","    "," X  "
+2710 data "XXXX","  X ","    "," X  "
+2720 data "    ","  X ","XXXX"," X  "
+2730 data "    ","  X ","    "," X  "
 
-2105 rem p
-2110 data 1, 7, 0, 0
-2120 data 6, 2, 2, 0
-2130 data 0, 7, 4, 0
-2140 data 2, 2, 3, 0
+2800 data "X   "," XX ","    "," X  "
+2810 data "XXX "," X  ","XXX "," X  "
+2820 data "    "," X  ","  X ","XX  "
+2830 data "    ","    ","    ","    "
 
-2205 rem q
-2210 data 4, 7, 0, 0
-2220 data 2, 2, 6, 0
-2230 data 0, 7, 1, 0
-2240 data 3, 2, 2, 0
+2900 data "  X ","  X ","    ","XX  "
+2910 data "XXX ","  X ","XXX "," X  "
+2920 data "    ","  XX","X   "," X  "
+2930 data "    ","    ","    ","    "
 
-2305 rem o
-2310 data 6, 6, 0, 0
-2320 data 6, 6, 0, 0
-2330 data 6, 6, 0, 0
-2340 data 6, 6, 0, 0
+3000 data " XX "," XX "," XX "," XX "
+3010 data " XX "," XX "," XX "," XX "
+3020 data "    ","    ","    ","    "
+3030 data "    ","    ","    ","    "
 
-2405 rem s
-2410 data 6, 3, 0, 0
-2420 data 2, 6, 4, 0
-2430 data 0, 6, 3, 0
-2440 data 1, 3, 2, 0
+3100 data " XX "," X  ","    ","X   "
+3110 data "XX  "," XX "," XX ","XX  "
+3120 data "    ","  X ","XX  "," X  "
+3130 data "    ","    ","    ","    "
 
-2505 rem t
-2510 data 7,2,0,0
-2520 data 4,6,4,0
-2530 data 0,2,7,0
-2540 data 1,3,1,0
+3200 data " X  "," X  ","    "," X  "
+3210 data "XXX "," XX ","XXX ","XX  "
+3220 data "    "," X  "," X  "," X  "
+3230 data "    ","    ","    ","    "
 
-2605 rem z
-2610 data 3, 6, 0, 0
-2620 data 4, 6, 2, 0
-2630 data 0, 3, 6, 0
-2640 data 2, 3, 1, 0
+3300 data "XX  ","  X ","    "," X  "
+3310 data " XX "," XX ","XX  ","XX  "
+3320 data "    "," X  "," XX ","X   "
+3330 data "    ","    ","    ","    "
