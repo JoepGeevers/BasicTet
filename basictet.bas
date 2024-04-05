@@ -26,6 +26,8 @@
 320 y = 5
 325 t = INT(RND(1)*7)
 330 o = 0
+332 y2 = y: x2 = x: o2 = o: gosub 900: rem collision detection
+333 if peek(1064) = 42 then return: rem no place for this tetro
 335 gosub 200
 340 y2 = y: x2 = x: o2 = o
 341 d = d + 1: if d = 10 then d = 0: y2 = y2 + 1: goto 362
@@ -40,7 +42,6 @@
 367 if peek(1064) = 218 then gosub 1000: goto 310: rem land tetronimo
 370 gosub 700: rem maybe transform tetronimo
 380 goto 340
-390 return
 
 400 rem **** dim variables ****
 405 let t = 6: rem there's 7 tetronimos
