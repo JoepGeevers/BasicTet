@@ -29,17 +29,18 @@
 332 y2 = y: x2 = x: o2 = o: gosub 900: rem collision detection
 333 if peek(1064) = 42 then return: rem no place for this tetro
 335 gosub 200
-340 y2 = y: x2 = x: o2 = o
-341 d = d + 1: if d = 10 then d = 0: y2 = y2 + 1: goto 362
-342 get k$
-343 if k$ = "w" then o2 = (o2 + 1) and 3: goto 362
-344 if k$ = "a" then x2 = x2 - 1: goto 362
+340 rem **** loop ****
+341 y2 = y: x2 = x: o2 = o
+342 d = d + 1: if d = 10 then d = 0: y2 = y2 + 1: goto 362
+343 get k$
+344 if k$ = "w" then o2 = (o2 + 1) and 3: goto 362
+345 if k$ = "a" then x2 = x2 - 1: goto 362
 350 if k$ = "s" then y2 = y2 + 1: goto 362
 352 if k$ = "d" then x2 = x2 + 1: goto 362
-357 goto 340
+357 goto 380
 362 gosub 900: rem collision detection
-366 if peek(1064) = 42 then goto 340
-367 if peek(1064) = 218 then gosub 1000: goto 310: rem land tetronimo
+366 if peek(1064) = 42 then goto 380
+367 if peek(1064) = 218 then gosub 1000: gosub 1100: goto 310: rem land tetro
 370 gosub 700: rem maybe transform tetronimo
 380 goto 340
 
@@ -102,6 +103,31 @@
 1010 c = 215
 1020 gosub 600
 1030 return
+
+1100 rem **** remove filled lines ****
+1110 for yt = y to y + 3
+1115 : f = 1
+1120 : for xt = 15 to 24
+1125 :   if peek(1024 + yt * 40 + xt) <> 215 then f = 0
+1140 : next xt
+1145 : if f = 1 then gosub 1200: rem remove line yt
+1198 next yt
+1199 return
+
+1200 rem **** remove line yt
+1210 : for xt = 15 to 24
+1220 :   poke 1024 + yt * 40 + xt, 32
+1230 : next xt
+1240 gosub 1300: rem move everything down
+1299 return
+
+1300 rem **** move everything down to yt
+1310 for yd = yt to 5 step -1
+1320 : for xd = 15 to 24
+1330 :   poke 1024 + yd * 40 + xd, peek(1024 + (yd -1) * 40 + xd)
+1340 : next xd
+1350 next yd
+1399 return
 
 2000 rem **** data ****
 
