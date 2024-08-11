@@ -1,4 +1,5 @@
-10 print "{clear}basictet"
+10 print "{clear}"
+12 y = 11: x = 16: gosub 1500: print "basictet": rem locate
 15 gosub 400: rem dim variables
 20 gosub 100: rem read tetronimos
 25 gosub 800: rem render playing field
@@ -79,6 +80,7 @@
 750 return
 
 800 rem **** render playing field ****
+805 print "{clear}";
 810 for y = 5 to 20
 820 : poke 1024 + y*40 + 14, 160
 830 : poke 1024 + y*40 + 25, 160
@@ -132,6 +134,34 @@
 1340 : next xd
 1350 next yd
 1399 return
+
+1400 rem **** prerender transformations
+1401 rem logic: 
+1402 rem if the spot to the left exists and is X, render X
+1403 rem else: if the spot was an X, render a space
+1404 rem else: render a skip
+
+1405 dim tr$(7, 4)
+1410 for te = 0 to 6: rem tetronimo
+1415 : for ro = 0 to 3: rem rotation
+1420 :   rem **** prerender right ****
+1430 :   for li = 0 to 3: rem line
+1435 :     for bi = 0 to 3: rem bit
+1438 :       b = sq(te, ro, li) and 2^bi
+1440 :       if b = 0 then tr$(te, ro) = tr$(te, ro) + "{right}": rem skip
+1450 :       if b > 0 then tr$(te, ro) = tr$(te, ro) + " ": rem clear
+1460 :     next bi
+1465 :     tr$(te, ro) = tr$(te, ro) + "{down}{left}{left}{left}{left}"
+1470 :   next li
+1475 :   tr$(te, ro) = tr$(te, ro) + "{up}{up}{up}{left}{left}{left}{left}"
+1480 : next ro
+1490 next te
+1499 return
+
+1500 rem **** locate ****
+1510 poke 214, (y - 1) and 255: print: poke 211, x
+1599 return 
+
 
 2000 rem **** data ****
 
