@@ -44,9 +44,15 @@
 357 goto 380
 362 gosub 900: rem collision detection
 366 if peek(1064) = 42 then goto 380
-367 if peek(1064) = 218 then gosub 1000: gosub 1100: goto 310: rem land tetro
+367 if peek(1064) = 218 then gosub 390: rem land tetro
 370 gosub 700: rem maybe transform tetronimo
 380 goto 340
+
+390 rem gosub helper
+391 gosub 1000
+392 gosub 1100
+393 gosub 310
+396 return
 
 400 rem **** dim variables ****
 405 let t = 6: rem there's 7 tetronimos
