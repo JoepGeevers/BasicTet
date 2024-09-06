@@ -1,0 +1,178 @@
+print "{clear}"
+y = 11: x = 16
+gosub @1500
+print "basictet": rem locate
+gosub @400
+gosub @100
+gosub @800
+gosub @300
+end
+@100
+rem **** read tetronimos ****
+for t = 0 to 6
+: for l = 0 to 3
+:   for r = 0 to 3
+:     read a$
+:     for b = 0 to 3
+:       if mid$(a$, b+1, 1) <> " " then sq(t, r, l) = sq(t, r, l) or 2^b
+:     next b
+:   next r
+: next l
+next t
+return
+@200
+rem **** render tetronimo ****
+c = 209
+gosub @600
+return
+@300
+rem **** game loop ****
+x = 40 / 2 - 2
+y = 5
+t = INT(RND(1)*7)
+o = 0
+@340
+y2 = y: x2 = x: o2 = o: gosub @900
+if peek(1064) = 42 then return: rem no place for this tetro
+gosub @200
+rem **** loop ****
+y2 = y: x2 = x: o2 = o
+d = d + 1
+if d = 10 then d = 0: y2 = y2 + 1: goto @362
+get k$
+if k$ = "w" then o2 = (o2 + 1) and 3: goto @362
+if k$ = "a" then x2 = x2 - 1: goto @362
+if k$ = "s" then y2 = y2 + 1: goto @362
+if k$ = "d" then x2 = x2 + 1: goto @362
+goto @380
+@362
+gosub @900
+if peek(1064) = 42 then goto @380
+if peek(1064) = 218 then gosub @390
+gosub @700
+@380
+goto @340
+@390
+rem gosub helper
+gosub @1000
+gosub @1100
+gosub @310
+return
+@400 
+rem **** dim variables ****
+let t = 6: rem there's 7 tetronimos
+let o = 3: rem each tetronimo has 4 orientations
+let l = 3: rem every orientation has 4 lines
+dim sq(6, 3, 3): rem every line and orientation for every tetronimo
+dim tt(7, 4, 4, 4)
+let x = 0: rem the horizontal position of the tetronimo
+let y = 0: rem the vertical position of the tetronimo
+return
+@500
+rem **** clear tetronimo ****
+c = 32
+gosub @600
+return
+@600
+for l = 0 to 3
+: tmp = 1024 + x + (y+l)*40
+: for s = 0 to 3
+:   if (sq(t, o, l) and 2^s) > 0 then poke tmp + s, c
+: next s
+next l
+return
+@700
+rem **** maybe render tetronimo ****
+if y2 = y and x2 = x and o2 = o then return
+gosub @500
+y = y2: x = x2: o = o2
+gosub @200
+return
+@800
+rem **** render playing field ****
+print "{clear}";
+for y = 5 to 20
+: poke 1024 + y*40 + 14, 160
+: poke 1024 + y*40 + 25, 160
+next y
+for x = 14 to 25
+: poke 1024 + y*40 + x, 160
+next x
+return
+@900
+rem **** detect colision ****
+for l = 0 to 3
+: tmp = 1024 + x2 + (y2+l)*40
+: for s = 0 to 3
+:   if (sq(t, o2, l) and 2^s) = 0 then goto @930
+:   sc = peek(tmp + s)
+:   if sc = 32 then goto @930
+:   if sc = 209 then goto @930
+:   if y2 = y then poke 1064, 42: return
+:   poke 1064, 218: return
+@930
+: next s
+next l
+poke 1064, 32
+return
+rem **** render landed tetronimo ****
+c = 215
+gosub @600
+return
+rem **** remove filled lines ****
+for yt = y to y + 3
+: f = 1
+: for xt = 15 to 24
+:   if peek(1024 + yt * 40 + xt) <> 215 then f = 0
+: next xt
+: if f = 1 then gosub @1200
+next yt
+return
+@1200
+rem **** remove line yt
+: for xt = 15 to 24
+:   poke 1024 + yt * 40 + xt, 32
+: next xt
+gosub @1300
+return
+@1300
+rem **** move everything down to yt
+for yd = yt to 5 step -1
+: for xd = 15 to 24
+:   poke 1024 + yd * 40 + xd, peek(1024 + (yd -1) * 40 + xd)
+: next xd
+next yd
+return
+@1500
+rem **** locate ****
+poke 214, (y - 1) and 255: print: poke 211, x
+return 
+rem **** data ****
+data "    ","  X ","    "," X  "
+data "XXXX","  X ","    "," X  "
+data "    ","  X ","XXXX"," X  "
+data "    ","  X ","    "," X  "
+data "X   "," XX ","    "," X  "
+data "XXX "," X  ","XXX "," X  "
+data "    "," X  ","  X ","XX  "
+data "    ","    ","    ","    "
+data "  X ","  X ","    ","XX  "
+data "XXX ","  X ","XXX "," X  "
+data "    ","  XX","X   "," X  "
+data "    ","    ","    ","    "
+data " XX "," XX "," XX "," XX "
+data " XX "," XX "," XX "," XX "
+data "    ","    ","    ","    "
+data "    ","    ","    ","    "
+data " XX "," X  ","    ","X   "
+data "XX  "," XX "," XX ","XX  "
+data "    ","  X ","XX  "," X  "
+data "    ","    ","    ","    "
+data " X  "," X  ","    "," X  "
+data "XXX "," XX ","XXX ","XX  "
+data "    "," X  "," X  "," X  "
+data "    ","    ","    ","    "
+data "XX  ","  X ","    "," X  "
+data " XX "," XX ","XX  ","XX  "
+data "    "," X  "," XX ","X   "
+data "    ","    ","    ","    "
