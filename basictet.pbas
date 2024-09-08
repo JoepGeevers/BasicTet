@@ -1,65 +1,65 @@
 print "{clear}"
 y = 11: x = 16
-gosub @1500
+gosub @locate
 print "basictet": rem locate
-gosub @400
-gosub @100
-gosub @800
-gosub @300
+gosub @dim-variables
+gosub @read-tetronimos
+gosub @render-playing-field
+gosub @game-loop
 end
-@100
+`
+@read-tetronimos
 rem **** read tetronimos ****
 for t = 0 to 6
-: for l = 0 to 3
-:   for r = 0 to 3
-:     read a$
-:     for b = 0 to 3
-:       if mid$(a$, b+1, 1) <> " " then sq(t, r, l) = sq(t, r, l) or 2^b
-:     next b
-:   next r
-: next l
+  for l = 0 to 3
+    for r = 0 to 3
+      read a$
+      for b = 0 to 3
+        if mid$(a$, b+1, 1) <> " " then sq(t, r, l) = sq(t, r, l) or 2^b
+      next b
+    next r
+  next l
 next t
 return
-@200
-rem **** render tetronimo ****
+`
+@render-tetronimo
 c = 209
-gosub @600
+gosub @render-or-clear-tetronimo
 return
-@300
-rem **** game loop ****
+`
+@game-loop
 x = 40 / 2 - 2
 y = 5
 t = INT(RND(1)*7)
 o = 0
-@340
-y2 = y: x2 = x: o2 = o: gosub @900
+@game-loop-start
+y2 = y: x2 = x: o2 = o: gosub @collision-detection
 if peek(1064) = 42 then return: rem no place for this tetro
-gosub @200
+gosub @render-tetronimo
 rem **** loop ****
 y2 = y: x2 = x: o2 = o
 d = d + 1
-if d = 10 then d = 0: y2 = y2 + 1: goto @362
+if d = 10 then d = 0: y2 = y2 + 1: goto @game-loop-handle-change
 get k$
-if k$ = "w" then o2 = (o2 + 1) and 3: goto @362
-if k$ = "a" then x2 = x2 - 1: goto @362
-if k$ = "s" then y2 = y2 + 1: goto @362
-if k$ = "d" then x2 = x2 + 1: goto @362
-goto @380
-@362
-gosub @900
-if peek(1064) = 42 then goto @380
-if peek(1064) = 218 then gosub @390
-gosub @700
-@380
-goto @340
-@390
+if k$ = "w" then o2 = (o2 + 1) and 3: goto @game-loop-handle-change
+if k$ = "a" then x2 = x2 - 1: goto @game-loop-handle-change
+if k$ = "s" then y2 = y2 + 1: goto @game-loop-handle-change
+if k$ = "d" then x2 = x2 + 1: goto @game-loop-handle-change
+goto @game-loop-start
+@game-loop-handle-change
+gosub @collision-detection
+if peek(1064) = 42 then goto @game-loop-start
+if peek(1064) = 218 then goto @land-tetronimo
+gosub @maybe-render-tetronimo
+goto @game-loop-start
+`
+@land-tetronimo
 rem gosub helper
-gosub @1000
-gosub @1100
-gosub @310
-return
-@400 
-rem **** dim variables ****
+gosub @render-landed-tetronimo
+gosub @remove-filled-lines
+goto @game-loop
+`
+@dim-variables
 let t = 6: rem there's 7 tetronimos
 let o = 3: rem each tetronimo has 4 orientations
 let l = 3: rem every orientation has 4 lines
@@ -68,39 +68,40 @@ dim tt(7, 4, 4, 4)
 let x = 0: rem the horizontal position of the tetronimo
 let y = 0: rem the vertical position of the tetronimo
 return
-@500
-rem **** clear tetronimo ****
+`
+@clear-tetronimo
 c = 32
-gosub @600
+gosub @render-or-clear-tetronimo
 return
-@600
+`
+@render-or-clear-tetronimo
 for l = 0 to 3
-: tmp = 1024 + x + (y+l)*40
-: for s = 0 to 3
-:   if (sq(t, o, l) and 2^s) > 0 then poke tmp + s, c
-: next s
+  tmp = 1024 + x + (y+l)*40
+  for s = 0 to 3
+    if (sq(t, o, l) and 2^s) > 0 then poke tmp + s, c
+  next s
 next l
 return
-@700
-rem **** maybe render tetronimo ****
+`
+@maybe-render-tetronimo
 if y2 = y and x2 = x and o2 = o then return
-gosub @500
+gosub @clear-tetronimo
 y = y2: x = x2: o = o2
-gosub @200
+gosub @render-tetronimo
 return
-@800
-rem **** render playing field ****
+`
+@render-playing-field
 print "{clear}";
 for y = 5 to 20
-: poke 1024 + y*40 + 14, 160
-: poke 1024 + y*40 + 25, 160
+  poke 1024 + y*40 + 14, 160
+  poke 1024 + y*40 + 25, 160
 next y
 for x = 14 to 25
-: poke 1024 + y*40 + x, 160
+  poke 1024 + y*40 + x, 160
 next x
 return
-@900
-rem **** detect colision ****
+`
+@collision-detection
 for l = 0 to 3
 : tmp = 1024 + x2 + (y2+l)*40
 : for s = 0 to 3
@@ -115,36 +116,39 @@ for l = 0 to 3
 next l
 poke 1064, 32
 return
-rem **** render landed tetronimo ****
+`
+@render-landed-tetronimo
 c = 215
-gosub @600
+gosub @render-or-clear-tetronimo
 return
-rem **** remove filled lines ****
+`
+@remove-filled-lines
 for yt = y to y + 3
-: f = 1
-: for xt = 15 to 24
-:   if peek(1024 + yt * 40 + xt) <> 215 then f = 0
-: next xt
-: if f = 1 then gosub @1200
+  f = 1
+  for xt = 15 to 24
+    if peek(1024 + yt * 40 + xt) <> 215 then f = 0
+  next xt
+  if f = 1 then gosub @1200
 next yt
 return
-@1200
+`
+@clear-line-yt
 rem **** remove line yt
-: for xt = 15 to 24
-:   poke 1024 + yt * 40 + xt, 32
-: next xt
-gosub @1300
+  for xt = 15 to 24
+    poke 1024 + yt * 40 + xt, 32
+  next xt
+gosub @move-everything-down-to-line-yt
 return
-@1300
-rem **** move everything down to yt
+`
+@move-everything-down-to-line-yt
 for yd = yt to 5 step -1
-: for xd = 15 to 24
-:   poke 1024 + yd * 40 + xd, peek(1024 + (yd -1) * 40 + xd)
-: next xd
+  for xd = 15 to 24
+    poke 1024 + yd * 40 + xd, peek(1024 + (yd -1) * 40 + xd)
+  next xd
 next yd
 return
-@1500
-rem **** locate ****
+`
+@locate
 poke 214, (y - 1) and 255: print: poke 211, x
 return 
 rem **** data ****
